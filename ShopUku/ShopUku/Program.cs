@@ -15,6 +15,13 @@ builder.Services.AddSwaggerGen();
 var connection = builder.Configuration.GetSection("ConnectionStrings");
 builder.Services.Configure<Connection>(connection);
 
+// AddCors
+builder.Services.AddCors(options => options.AddPolicy("AllowOrigin", policy =>
+{
+    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+}));
+
+//
 builder.Services.AddSingleton<BrandsRepository>();
 builder.Services.AddSingleton<BrandService>();
 
@@ -61,6 +68,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowOrigin");
 
 app.UseAuthorization();
 
