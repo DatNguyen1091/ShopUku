@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ShopUku-BAL\ShopUku-BAL.csproj" />
     <ProjectReference Include="..\ShopUku-DAL\ShopUku-DAL.csproj" />
   </ItemGroup>
