@@ -1,7 +1,7 @@
 ﻿
 namespace ShopUku_DAL.Model
 {
-    internal class Customers
+    public class Customers
     {
         public int id { get; set; }
         public string? fullName { get; set; }
