@@ -102,12 +102,12 @@ namespace ShopUku_DAL.Repository
                     int rows = command.ExecuteNonQuery();
                     if (rows > 0)
                     {
-                        return "Brand deleted successfully.";
+                        return "Feedback deleted successfully.";
                     }
                 }
                 connection.Close();
             }
-            return "Failed to delete brand.";
+            return "Failed to delete feedback.";
         }
     }
 }
