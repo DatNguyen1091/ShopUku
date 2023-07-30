@@ -49,7 +49,7 @@ namespace ShopUku_DAL.Repository
 
         public Categories GetById(int id)
         {
-            Categories item = new Categories();
+            Categories category = new Categories();
             using (SqlConnection connection = new SqlConnection(_connection.SQLString))
             {
                 connection.Open();
@@ -59,18 +59,18 @@ namespace ShopUku_DAL.Repository
                     SqlDataReader reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        item.id = reader.GetInt32(0);
-                        item.name = reader.GetString(1);
-                        item.description = reader.GetString(3);
-                        item.isDeleted = reader.GetBoolean(4);
-                        item.createdAt = reader.GetDateTime(5);
-                        item.updatedAt = reader.GetDateTime(6);
+                        category.id = reader.GetInt32(0);
+                        category.name = reader.GetString(1);
+                        category.description = reader.GetString(3);
+                        category.isDeleted = reader.GetBoolean(4);
+                        category.createdAt = reader.GetDateTime(5);
+                        category.updatedAt = reader.GetDateTime(6);
                     }
                     reader.Close();
                 }
                 connection.Close();
             }
-            return item;
+            return category;
         }
 
         public Categories Create(Categories model)
