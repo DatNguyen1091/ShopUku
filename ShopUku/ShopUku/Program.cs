@@ -1,4 +1,6 @@
+using ShopUku_BAL.Services;
 using ShopUku_DAL.Data;
+using ShopUku_DAL.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,41 @@ builder.Services.AddSwaggerGen();
 var connection = builder.Configuration.GetSection("ConnectionStrings");
 builder.Services.Configure<Connection>(connection);
 
+builder.Services.AddSingleton<BrandsRepository>();
+builder.Services.AddSingleton<BrandService>();
+
+builder.Services.AddSingleton<CartItemRepository>();
+builder.Services.AddSingleton<CartItemService>();
+
+builder.Services.AddSingleton<CartRepository>();
+builder.Services.AddSingleton<CartService>();
+
+builder.Services.AddSingleton<CategoryRepository>();
+builder.Services.AddSingleton<CategoryService>();
+
+builder.Services.AddSingleton<CustomerRepository>();
+builder.Services.AddSingleton<CustomerService>();
+
+builder.Services.AddSingleton<FeedbackRepository>();
+builder.Services.AddSingleton<FeedbackService>();
+
+builder.Services.AddSingleton<OrderItemRepository>();
+builder.Services.AddSingleton<OrderItemService>();
+
+builder.Services.AddSingleton<OrderRepository>();
+builder.Services.AddSingleton<OrderService>();
+
+builder.Services.AddSingleton<ProductRepository>();
+builder.Services.AddSingleton<ProductService>();
+
+builder.Services.AddSingleton<RoleRepository>();
+builder.Services.AddSingleton<RoleService>();
+
+builder.Services.AddSingleton<UserRepository>();
+builder.Services.AddSingleton<UserRoleService>();
+
+builder.Services.AddSingleton<UserRoleRepository>();
+builder.Services.AddSingleton<UserService>();
 
 var app = builder.Build();
 
