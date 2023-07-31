@@ -34,7 +34,6 @@ namespace ShopUku_DAL.Repository
                             Categories model = new Categories();
                             model.id = (int)reader["id"];
                             model.name = (string)reader["name"];
-                            model.description = (string)reader["description"];
                             model.isDeleted = (bool)reader["isDeleted"];
                             model.createdAt = (DateTime)reader["createdAt"];
                             model.updatedAt = (DateTime)reader["updatedAt"];
@@ -61,10 +60,9 @@ namespace ShopUku_DAL.Repository
                     {
                         category.id = reader.GetInt32(0);
                         category.name = reader.GetString(1);
-                        category.description = reader.GetString(3);
-                        category.isDeleted = reader.GetBoolean(4);
-                        category.createdAt = reader.GetDateTime(5);
-                        category.updatedAt = reader.GetDateTime(6);
+                        category.isDeleted = reader.GetBoolean(2);
+                        category.createdAt = reader.GetDateTime(3);
+                        category.updatedAt = reader.GetDateTime(4);
                     }
                     reader.Close();
                 }
@@ -78,11 +76,10 @@ namespace ShopUku_DAL.Repository
             using (SqlConnection connection = new SqlConnection(_connection.SQLString))
             {
                 connection.Open();
-                var query = "INSERT INTO Categories (name, description, isDeleted) VALUES (@name, @description, @isDeleted)";
+                var query = "INSERT INTO Categories (name, isDeleted) VALUES (@name, @isDeleted)";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@name", model.name);
-                    command.Parameters.AddWithValue("@description", model.description);
                     command.Parameters.AddWithValue("@isDeleted", model.isDeleted);
                     command.ExecuteNonQuery();
                 }
@@ -96,12 +93,11 @@ namespace ShopUku_DAL.Repository
             using (SqlConnection connection = new SqlConnection(_connection.SQLString))
             {
                 connection.Open();
-                var query = "UPDATE Categories SET name = @name, description = @description, isDeleted = @isDeleted WHERE id = @id";
+                var query = "UPDATE Categories SET name = @name, isDeleted = @isDeleted WHERE id = @id";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@id", id);
                     command.Parameters.AddWithValue("@name", model.name);
-                    command.Parameters.AddWithValue("@description", model.description);
                     command.Parameters.AddWithValue("@isDeleted", model.isDeleted);
                     int rows = command.ExecuteNonQuery();
                     if (rows == 0)

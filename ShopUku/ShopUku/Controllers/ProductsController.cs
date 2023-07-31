@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using ShopUku_BAL.Services;
 using ShopUku_DAL.Model;
@@ -7,6 +7,7 @@ namespace ShopUku.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowOrigin")]
     public class ProductsController : ControllerBase
     {
         private readonly ProductService _productService;
@@ -23,7 +24,6 @@ namespace ShopUku.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
         public Products GetProductsId(int id)
         {
             return _productService.GetProductsById(id);

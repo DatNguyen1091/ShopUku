@@ -34,13 +34,11 @@ namespace ShopUku_DAL.Repository
                             model.id = (int)reader["id"];
                             model.name = (string)reader["name"];
                             model.description = (string)reader["description"];
-                            model.metaDescription = (string)reader["metaDescription"];
                             model.price = (decimal)reader["price"];
                             model.oldPrice = (decimal)reader["oldPrice"];
                             model.imageUrl = (string)reader["imageUrl"];
                             model.quantity = (int)reader["quantity"];
                             model.categoryId = (int)reader["categoryId"];
-                            model.brandId = (int)reader["brandId"];
                             model.isDeleted = (bool)reader["isDeleted"];
                             model.createdAt = (DateTime)reader["createdAt"];
                             model.updatedAt = (DateTime)reader["updatedAt"];
@@ -68,16 +66,14 @@ namespace ShopUku_DAL.Repository
                         item.id = reader.GetInt32(0);
                         item.name = reader.GetString(1);
                         item.description = reader.GetString(2);
-                        item.metaDescription = reader.GetString(3);
-                        item.price = reader.GetDecimal(4);
-                        item.oldPrice = reader.GetDecimal(5);
-                        item.imageUrl = reader.GetString(6);
-                        item.quantity = reader.GetInt32(7);
-                        item.categoryId = reader.GetInt32(8);
-                        item.brandId = reader.GetInt32(9);
-                        item.isDeleted = reader.GetBoolean(10);
-                        item.createdAt = reader.GetDateTime(11);
-                        item.updatedAt = reader.GetDateTime(12);
+                        item.price = reader.GetDecimal(3);
+                        item.oldPrice = reader.GetDecimal(4);
+                        item.imageUrl = reader.GetString(5);
+                        item.quantity = reader.GetInt32(6);
+                        item.categoryId = reader.GetInt32(7);
+                        item.isDeleted = reader.GetBoolean(8);
+                        item.createdAt = reader.GetDateTime(9);
+                        item.updatedAt = reader.GetDateTime(10);
                     }
                     reader.Close();
                 }
@@ -91,17 +87,15 @@ namespace ShopUku_DAL.Repository
             using (SqlConnection connection = new SqlConnection(_connection.SQLString))
             {
                 connection.Open();
-                var query = "INSERT INTO Products (name, description, metaDescription, price, oldPrice, imageUrl, quantity, categoryId, brandId, isDeleted) VALUES (@name, @description, @metaDescription, @price, @oldPrice, @imageUrl, @quantity, @categoryId, @brandId, @isDeleted)";
+                var query = "INSERT INTO Products (name, description, price, oldPrice, imageUrl, quantity, categoryId, isDeleted) VALUES (@name, @description, @price, @oldPrice, @imageUrl, @quantity, @categoryId, @isDeleted)";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@name", model.name);
                     command.Parameters.AddWithValue("@description", model.description);
-                    command.Parameters.AddWithValue("@metaDescription", model.metaDescription);
                     command.Parameters.AddWithValue("@price", model.price);
                     command.Parameters.AddWithValue("@oldPrice", model.oldPrice);
                     command.Parameters.AddWithValue("@quantity", model.quantity);
                     command.Parameters.AddWithValue("@categoryId", model.categoryId);
-                    command.Parameters.AddWithValue("@brandId", model.brandId);
                     command.Parameters.AddWithValue("@imageUrl", model.imageUrl);
                     command.Parameters.AddWithValue("@isDeleted", model.isDeleted);
                     command.ExecuteNonQuery();
@@ -116,18 +110,16 @@ namespace ShopUku_DAL.Repository
             using (SqlConnection connection = new SqlConnection(_connection.SQLString))
             {
                 connection.Open();
-                var query = "UPDATE Products SET name = @name, description = @description, metaDescription = @metaDescription, price = @price, oldPrice = @oldPrice, imageUrl = @imageUrl, quantity = @quantity, categoryId = @categoryId, brandId = @brandId, isDeleted = @isDeleted WHERE id = @id";
+                var query = "UPDATE Products SET name = @name, description = @description, price = @price, oldPrice = @oldPrice, imageUrl = @imageUrl, quantity = @quantity, categoryId = @categoryId, isDeleted = @isDeleted WHERE id = @id";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@id", id);
                     command.Parameters.AddWithValue("@name", model.name);
                     command.Parameters.AddWithValue("@description", model.description);
-                    command.Parameters.AddWithValue("@metaDescription", model.metaDescription);
                     command.Parameters.AddWithValue("@price", model.price);
                     command.Parameters.AddWithValue("@oldPrice", model.oldPrice);
                     command.Parameters.AddWithValue("@quantity", model.quantity);
                     command.Parameters.AddWithValue("@categoryId", model.categoryId);
-                    command.Parameters.AddWithValue("@brandId", model.brandId);
                     command.Parameters.AddWithValue("@imageUrl", model.imageUrl);
                     command.Parameters.AddWithValue("@isDeleted", model.isDeleted);
                     int rows = command.ExecuteNonQuery();

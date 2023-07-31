@@ -22,8 +22,6 @@ builder.Services.AddCors(options => options.AddPolicy("AllowOrigin", policy =>
 }));
 
 //
-builder.Services.AddSingleton<BrandsRepository>();
-builder.Services.AddSingleton<BrandService>();
 
 builder.Services.AddSingleton<CartItemRepository>();
 builder.Services.AddSingleton<CartItemService>();
