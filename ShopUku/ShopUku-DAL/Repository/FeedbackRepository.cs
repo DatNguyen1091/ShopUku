@@ -77,7 +77,7 @@ namespace ShopUku_DAL.Repository
             using (SqlConnection connection = new SqlConnection(_connection.SQLString))
             {
                 connection.Open();
-                var query = "INSERT INTO Feedback ( name, email, subject, message ) VALUES ( @names, @email, @subject, @message )";
+                var query = "INSERT INTO Feedback ( name, email, subject, message ) VALUES ( @name, @email, @subject, @message )";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@name", model.name);
