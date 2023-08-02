@@ -13,15 +13,16 @@ namespace ShopUku_DAL.Repository
             _connection = connection.Value;
         }
 
-        public Users GetUserByUsername(string username)
+        public Users GetUser(string username, string password)
         {
             Users? account = null;
             using (SqlConnection connection = new SqlConnection(_connection.SQLString))
             {
                 connection.Open();
-                using (SqlCommand command = new SqlCommand("SELECT * FROM Users WHERE username = @username", connection))
+                using (SqlCommand command = new SqlCommand("SELECT * FROM Users WHERE username = @username AND password = @password", connection))
                 {
                     command.Parameters.AddWithValue("@username", username);
+                    command.Parameters.AddWithValue("@password", password);
                     SqlDataReader reader = command.ExecuteReader();
                     if (reader.Read())
                     {
@@ -59,7 +60,23 @@ namespace ShopUku_DAL.Repository
             }
         }
 
-        public string Delete(int id)
+        public Users UpdateUserPass(Users acc)
+        {
+            using (SqlConnection connection = new SqlConnection(_connection.SQLString))
+            {
+                connection.Open();
+                var query = "UPDATE Users SET password = @password WHERE id = @id";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@password", acc.password);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+                return acc;
+            }
+        }
+
+        public string DeleteUser(int id)
         {
             using (SqlConnection connection = new SqlConnection(_connection.SQLString))
             {
