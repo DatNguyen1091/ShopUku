@@ -1,6 +1,9 @@
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using ShopUku_BAL.Services;
 using ShopUku_DAL.Data;
 using ShopUku_DAL.Repository;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,8 +24,28 @@ builder.Services.AddCors(options => options.AddPolicy("AllowOrigin", policy =>
     policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
 }));
 
-//
+// JWT Authentication
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
+var secretKey = builder.Configuration["AppSettings:SecretKey"];
+var secrectKeyBytes = Encoding.UTF8.GetBytes(secretKey);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(option =>
+{
+    option.TokenValidationParameters = new TokenValidationParameters { 
+        // Tự cấp token
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        // Ký vào token
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(secrectKeyBytes),
+
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
+// AddSingleton
 builder.Services.AddSingleton<CartItemRepository>();
 builder.Services.AddSingleton<CartItemService>();
 
@@ -51,10 +74,10 @@ builder.Services.AddSingleton<RoleRepository>();
 builder.Services.AddSingleton<RoleService>();
 
 builder.Services.AddSingleton<UserRepository>();
-builder.Services.AddSingleton<UserRoleService>();
+builder.Services.AddSingleton<UserService>();
 
 builder.Services.AddSingleton<UserRoleRepository>();
-builder.Services.AddSingleton<UserService>();
+builder.Services.AddSingleton<UserRoleService>();
 
 var app = builder.Build();
 
@@ -67,7 +90,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
 app.UseCors("AllowOrigin");
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
