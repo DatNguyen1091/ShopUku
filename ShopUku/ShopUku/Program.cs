@@ -79,6 +79,9 @@ builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<UserRoleRepository>();
 builder.Services.AddSingleton<UserRoleService>();
 
+builder.Services.AddSingleton<CategoryProductRepository>();
+builder.Services.AddSingleton<CategoryProductService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
