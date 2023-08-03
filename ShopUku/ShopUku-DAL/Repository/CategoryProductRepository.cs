@@ -19,14 +19,7 @@ namespace ShopUku_DAL.Repository
             using (SqlConnection connection = new SqlConnection(_connection.SQLString))
             {
                 connection.Open();
-                /*
-                var query = "SELECT c.*, p.id AS productId, p.name AS productName, p.description, p.price, p.oldPrice, " +
-                    "p.imageUrl, p.quantity, p.categoryId, p.isDeleted AS productIsDeleted, " +
-                    "p.createdAt AS productCreatedAt, p.updatedAt AS productUpdatedAt " +
-                    "FROM Categories AS c " +
-                    "LEFT JOIN Products p ON c.id = p.categoryId " +
-                    "WHERE c.id = @CateId;";
-                */
+
                 var query = "SELECT c.*, p.id AS productId, p.name AS productName, p.description, p.price, p.oldPrice, " +
                    "p.imageUrl, p.quantity, p.categoryId, p.isDeleted AS productIsDeleted, " +
                    "p.createdAt AS productCreatedAt, p.updatedAt AS productUpdatedAt " +
