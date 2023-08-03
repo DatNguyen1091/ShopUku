@@ -65,9 +65,10 @@ namespace ShopUku_DAL.Repository
             using (SqlConnection connection = new SqlConnection(_connection.SQLString))
             {
                 connection.Open();
-                var query = "UPDATE Users SET password = @password WHERE id = @id";
+                var query = "UPDATE Users SET password = @password WHERE username = @username";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
+                    command.Parameters.AddWithValue("@username", acc.username);
                     command.Parameters.AddWithValue("@password", acc.password);
                     command.ExecuteNonQuery();
                 }
