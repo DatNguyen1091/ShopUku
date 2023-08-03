@@ -27,7 +27,7 @@ namespace ShopUku.Controllers
         public ApiRespose Login(Users user)
         {
             var Username = user.username!;
-            var Password = user.password!;
+            var Password = Md5Password.MD5Hash(user.password!);
             bool isAuthenticated = _usersService.AuthenticateUser(Username, Password);
             if (isAuthenticated != true)
             {
@@ -71,12 +71,14 @@ namespace ShopUku.Controllers
         [HttpPost("Signup")]
         public Users PostAccount(Users account)
         {
+            account.password = Md5Password.MD5Hash(account.password!);
             return _usersService.CreatAccount(account);
         }
 
         [HttpPut("ChangePass")]
         public Users PutPassAccount(Users account)
         {
+            account.password = Md5Password.MD5Hash(account.password!);
             return _usersService.UpdatePassAcc(account);
         }
 
