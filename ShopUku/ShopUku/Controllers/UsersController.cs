@@ -50,12 +50,16 @@ namespace ShopUku.Controllers
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var secretKeyBytes = Encoding.UTF8.GetBytes(_appSettings.SecretKey!);
+            string role = Account.isAdmin ? "Admin" : "User";
+
             var tokenDescription = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(new[] {
                     new Claim(ClaimTypes.Name, Account.username!),
+                    new Claim("UserId", Account.id.ToString()),
 
                     //roles
+                    new Claim(ClaimTypes.Role, role),
 
                     new Claim("TokenId", Guid.NewGuid().ToString())
                 }),
@@ -68,11 +72,23 @@ namespace ShopUku.Controllers
             return jwtTokenHandler.WriteToken(token);
         }
 
+        [HttpGet]
+        public List<Users> GetUsers(int? page)
+        {
+            return _usersService.GetAllUsers(page);
+        }
+
         [HttpPost("Signup")]
         public Users PostAccount(Users account)
         {
             account.password = Md5Password.MD5Hash(account.password!);
             return _usersService.CreatAccount(account);
+        }
+
+        [HttpPut("ChangeIsAdmin/{id}")]
+        public Users PutPassAccount(int id, Users account)
+        {
+            return _usersService.UpdateAcc(id, account);
         }
 
         [HttpPut("ChangePass")]
@@ -82,7 +98,7 @@ namespace ShopUku.Controllers
             return _usersService.UpdatePassAcc(account);
         }
 
-        [HttpDelete("DeleteUser")]
+        [HttpDelete("DeleteUser/{id}")]
         public string DeleteAccount(int id)
         {
             return _usersService.RemoveAcc(id);

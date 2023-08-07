@@ -13,6 +13,38 @@ namespace ShopUku_DAL.Repository
             _connection = connection.Value;
         }
 
+        public List<Users> GetAll(int? page)
+        {
+            List<Users> user = new List<Users>();
+            var pageSize = 10;
+            var pageIndex = page.HasValue ? Convert.ToInt32(page) : 1;
+            using (SqlConnection connection = new SqlConnection(_connection.SQLString))
+            {
+                connection.Open();
+                var offset = (pageIndex - 1) * pageSize;
+                using (SqlCommand command = new SqlCommand("SELECT * FROM Users ORDER BY id OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY", connection))
+                {
+                    command.Parameters.AddWithValue("@offset", offset);
+                    command.Parameters.AddWithValue("@pageSize", pageSize);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Users model = new Users();
+                            model.id = (int)reader["id"];
+                            model.username = (string)reader["username"];
+                            model.password = (string)reader["password"];
+                            model.email = (string)reader["email"];
+                            model.isAdmin = (bool)reader["isAdmin"];
+                            user.Add(model);
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return user.ToList();
+        }
+
         public Users GetUser(string username, string password)
         {
             Users? account = null;
@@ -52,6 +84,23 @@ namespace ShopUku_DAL.Repository
                     command.Parameters.AddWithValue("@username", acc.username);
                     command.Parameters.AddWithValue("@password", acc.password);
                     command.Parameters.AddWithValue("@email", acc.email);
+                    command.Parameters.AddWithValue("@isAdmin", acc.isAdmin);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+                return acc;
+            }
+        }
+
+        public Users UpdateUser(int id, Users acc)
+        {
+            using (SqlConnection connection = new SqlConnection(_connection.SQLString))
+            {
+                connection.Open();
+                var query = "UPDATE Users SET isAdmin = @isAdmin WHERE id = @id";
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@id", id);
                     command.Parameters.AddWithValue("@isAdmin", acc.isAdmin);
                     command.ExecuteNonQuery();
                 }

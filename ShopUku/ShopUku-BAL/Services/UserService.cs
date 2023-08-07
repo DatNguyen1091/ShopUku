@@ -24,9 +24,19 @@ namespace ShopUku_BAL.Services
             return false;
         }
 
+        public List<Users> GetAllUsers(int? page)
+        {
+            return _userRepository.GetAll(page);
+        }
+
         public Users CreatAccount(Users account)
         {
             return _userRepository.CreatNewUserAcc(account);
+        }
+
+        public Users UpdateAcc(int id ,Users account)
+        {
+            return _userRepository.UpdateUser(id, account);
         }
 
         public Users UpdatePassAcc(Users account)
