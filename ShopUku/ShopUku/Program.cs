@@ -25,10 +25,11 @@ builder.Services.AddCors(options => options.AddPolicy("AllowOrigin", policy =>
 }));
 
 // JWT Authentication
-builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+var appSettings = builder.Configuration.GetSection("AppSettings");
+builder.Services.Configure<AppSettings>(appSettings);
 
 var secretKey = builder.Configuration["AppSettings:SecretKey"];
-var secrectKeyBytes = Encoding.UTF8.GetBytes(secretKey);
+var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(option =>
@@ -39,11 +40,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         ValidateAudience = false,
         // Ký vào token
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(secrectKeyBytes),
+        IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
 
         ClockSkew = TimeSpan.Zero
     };
 });
+
+builder.Services.AddAuthorization();
 
 // AddSingleton
 builder.Services.AddSingleton<CartItemRepository>();
@@ -98,7 +101,6 @@ app.UseRouting();
 app.UseCors("AllowOrigin");
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapControllers();
